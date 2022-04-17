@@ -12,6 +12,8 @@ import idv.andy.bookService.book.service.bean.AddBookInput;
 import idv.andy.bookService.book.service.bean.AddBookOutput;
 import idv.andy.bookService.book.service.bean.BookBo;
 import idv.andy.bookService.book.service.bean.QueryAllBooksOutput;
+import idv.andy.bookService.book.service.bean.UpdateBookInput;
+import idv.andy.bookService.book.service.bean.UpdateBookOutput;
 import idv.andy.bookService.book.service.mapper.BookMapper;
 
 @Service
@@ -60,6 +62,31 @@ public class BookServiceImpl implements IBookService {
                 output.setBookBo(bookBo);
             } else {
                 output.setMessage("the book is exist");
+            }
+        } catch (Exception e) {
+            output.setMessage(e.getMessage());
+        }
+        
+        return output;
+    }
+
+    /**
+     * @see idv.andy.bookService.book.service.IBookService#updateBook(idv.andy.bookService.book.service.bean.UpdateBookInput)
+     */
+    @Override
+    public UpdateBookOutput updateBook(UpdateBookInput input) {
+        UpdateBookOutput output = new UpdateBookOutput();
+        
+        try {
+            BookBo bookBo = input.getBookBo();
+            
+            boolean isExist = bookDao.existsById(bookBo.getIsbn());
+            if (isExist) {
+                bookDao.save(bookMapper.bookBoToBook(bookBo));
+                output.setSuccess(true);
+                output.setBookBo(bookBo);
+            } else {
+                output.setMessage("the book is not exist");
             }
         } catch (Exception e) {
             output.setMessage(e.getMessage());

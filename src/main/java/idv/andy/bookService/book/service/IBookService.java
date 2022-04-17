@@ -3,6 +3,8 @@ package idv.andy.bookService.book.service;
 import idv.andy.bookService.book.service.bean.AddBookInput;
 import idv.andy.bookService.book.service.bean.AddBookOutput;
 import idv.andy.bookService.book.service.bean.QueryAllBooksOutput;
+import idv.andy.bookService.book.service.bean.UpdateBookInput;
+import idv.andy.bookService.book.service.bean.UpdateBookOutput;
 
 public interface IBookService {
     /**
@@ -19,4 +21,12 @@ public interface IBookService {
      * @return
      */
     public AddBookOutput addBook(AddBookInput input);
+    
+    /**
+     * @Description 更新書籍
+     *
+     * @param input
+     * @return
+     */
+    public UpdateBookOutput updateBook(UpdateBookInput input);
 }
