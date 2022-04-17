@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 import idv.andy.bookService.book.dao.IBookDao;
 import idv.andy.bookService.book.service.IBookService;
+import idv.andy.bookService.book.service.bean.AddBookInput;
+import idv.andy.bookService.book.service.bean.AddBookOutput;
+import idv.andy.bookService.book.service.bean.BookBo;
 import idv.andy.bookService.book.service.bean.QueryAllBooksOutput;
 import idv.andy.bookService.book.service.mapper.BookMapper;
 
@@ -33,6 +36,33 @@ public class BookServiceImpl implements IBookService {
             
             output.setBookBos(bookBos);
             output.setSuccess(true);
+        } catch (Exception e) {
+            output.setMessage(e.getMessage());
+        }
+        
+        return output;
+    }
+
+    /**
+     * @see idv.andy.bookService.book.service.IBookService#addBook(idv.andy.bookService.book.service.bean.AddBookInput)
+     */
+    @Override
+    public AddBookOutput addBook(AddBookInput input) {
+        AddBookOutput output = new AddBookOutput();
+        
+        try {
+            BookBo bookBo = input.getBookBo();
+            
+            boolean isExist = bookDao.findById(bookBo.getIsbn())
+                                     .isPresent();
+            
+            if (!isExist) {
+                bookDao.save(bookMapper.bookBoToBook(bookBo));
+                output.setSuccess(true);
+                output.setBookBo(bookBo);
+            } else {
+                output.setMessage("the book is exist");
+            }
         } catch (Exception e) {
             output.setMessage(e.getMessage());
         }

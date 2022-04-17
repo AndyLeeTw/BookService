@@ -1,5 +1,7 @@
 package idv.andy.bookService.book.service;
 
+import idv.andy.bookService.book.service.bean.AddBookInput;
+import idv.andy.bookService.book.service.bean.AddBookOutput;
 import idv.andy.bookService.book.service.bean.QueryAllBooksOutput;
 
 public interface IBookService {
@@ -9,4 +11,12 @@ public interface IBookService {
      * @return
      */
     public QueryAllBooksOutput queryAllBooks();
+    
+    /**
+     * @Description 新增書籍
+     *
+     * @param input
+     * @return
+     */
+    public AddBookOutput addBook(AddBookInput input);
 }
