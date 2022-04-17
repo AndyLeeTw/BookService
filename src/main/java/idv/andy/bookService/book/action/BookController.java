@@ -1,5 +1,7 @@
 package idv.andy.bookService.book.action;
 
+import java.util.stream.Collectors;
+
 import javax.annotation.Resource;
 
 import org.springframework.http.HttpStatus;
@@ -35,7 +37,12 @@ public class BookController {
         
         QueryAllBooksOutput queryAllBooksOutput = bookService.queryAllBooks();
         if (queryAllBooksOutput.isSuccess()) {
-            result.setBooks(queryAllBooksOutput.getBookBos());
+            var books = queryAllBooksOutput.getBookBos()
+                                           .stream()
+                                           .map(bookMapper::bookBoToBookView)
+                                           .collect(Collectors.toList());
+            
+            result.setBooks(books);
         } else {
             goNext = false;
             result.setMessage(queryAllBooksOutput.getMessage());
@@ -104,7 +111,7 @@ public class BookController {
         
         ResponseEntity<AddBookResult> responseEntity = null;
         if (goNext) {
-            result.setBook(bookBo);
+            result.setBook(bookMapper.bookBoToBookView(bookBo));
             responseEntity = new ResponseEntity<AddBookResult>(result, HttpStatus.OK);
         } else {
             result.setMessage(message);
