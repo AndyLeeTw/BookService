@@ -5,7 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UpdateBookResult {
+public class UpdateBookResult extends CommonResult {
     private BookView book;
-    private String message;
 }

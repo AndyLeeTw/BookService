@@ -7,7 +7,6 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class QueryAllBooksResult {
+public class QueryAllBooksResult extends CommonResult {
     private List<BookView> books;
-    private String message;
 }
