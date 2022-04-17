@@ -65,34 +65,10 @@ public class BookController {
         boolean goNext = true;
         String message = null;
         
-        StringBuilder sb = new StringBuilder();
-        if (!validateIsbn(inputBean.getIsbn())) {
-            sb.append("isbn 不符合格式\n");
-        }
-        
-        if (!StringUtils.hasText(inputBean.getName())) {
-            sb.append("書名不得為空\n");
-        }
-        
-        if (!StringUtils.hasText(inputBean.getAuthor())) {
-            sb.append("作者不得為空\n");
-        }
-        
-        if (!StringUtils.hasText(inputBean.getPublisher())) {
-            sb.append("出版商不得為空\n");
-        }
-        
-        if (inputBean.getPublishDate() == null) {
-            sb.append("出版日期不得為空\n");
-        }
-        
-        if (inputBean.getPrice() == null) {
-            sb.append("價格不得為空");
-        }
-        
-        if (!sb.isEmpty()) {
+        String validateRes = validateBookInput(inputBean);
+        if (StringUtils.hasText(validateRes)) {
             goNext = false;
-            message = sb.toString();
+            message = validateRes;
         }
         
         BookBo bookBo = null;
@@ -119,6 +95,39 @@ public class BookController {
         }
         
         return responseEntity;
+    }
+    
+    private String validateBookInput(BookInputBean inputBean) {
+        StringBuilder sb = new StringBuilder();
+        if (inputBean == null) {
+            sb.append("input 為 null");
+        } else {
+            if (!validateIsbn(inputBean.getIsbn())) {
+                sb.append("isbn 不符合格式\n");
+            }
+            
+            if (!StringUtils.hasText(inputBean.getName())) {
+                sb.append("書名不得為空\n");
+            }
+            
+            if (!StringUtils.hasText(inputBean.getAuthor())) {
+                sb.append("作者不得為空\n");
+            }
+            
+            if (!StringUtils.hasText(inputBean.getPublisher())) {
+                sb.append("出版商不得為空\n");
+            }
+            
+            if (inputBean.getPublishDate() == null) {
+                sb.append("出版日期不得為空\n");
+            }
+            
+            if (inputBean.getPrice() == null) {
+                sb.append("價格不得為空");
+            }
+        }
+        
+        return sb.toString();
     }
     
     private boolean validateIsbn(String isbn) {
