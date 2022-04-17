@@ -52,7 +52,7 @@ public class BookController {
         if (goNext) {
             responseEntity = new ResponseEntity<QueryAllBooksResult>(result, HttpStatus.OK);
         } else {
-            responseEntity = new ResponseEntity<QueryAllBooksResult>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+            responseEntity = new ResponseEntity<QueryAllBooksResult>(result, HttpStatus.BAD_REQUEST);
         }
         
         return responseEntity;
