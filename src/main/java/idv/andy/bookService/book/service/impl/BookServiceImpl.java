@@ -81,6 +81,7 @@ public class BookServiceImpl implements IBookService {
             BookBo bookBo = input.getBookBo();
             
             boolean isExist = bookDao.existsById(bookBo.getIsbn());
+            output.setExist(isExist);
             if (isExist) {
                 bookDao.save(bookMapper.bookBoToBook(bookBo));
                 output.setSuccess(true);

@@ -6,5 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UpdateBookOutput extends CommonOutput {
+    private boolean isExist;
     private BookBo bookBo;
 }

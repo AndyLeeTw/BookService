@@ -121,6 +121,7 @@ public class BookController {
             message = validateRes;
         }
 
+        boolean isExist = false;
         BookBo bookBo = null;
         if (goNext) {
             UpdateBookInput updateBookInput = new UpdateBookInput();
@@ -131,6 +132,7 @@ public class BookController {
                 bookBo = updateBookOutput.getBookBo();
             } else {
                 goNext = false;
+                isExist = updateBookOutput.isExist();
                 message = updateBookOutput.getMessage();
             }
         }
@@ -139,6 +141,9 @@ public class BookController {
         if (goNext) {
             result.setBook(bookMapper.bookBoToBookView(bookBo));
             responseEntity = new ResponseEntity<UpdateBookResult>(result, HttpStatus.OK);
+        } else if (!isExist) {
+            result.setMessage(message);
+            responseEntity = new ResponseEntity<UpdateBookResult>(result, HttpStatus.NOT_FOUND);
         } else {
             result.setMessage(message);
             responseEntity = new ResponseEntity<UpdateBookResult>(result, HttpStatus.BAD_REQUEST);
