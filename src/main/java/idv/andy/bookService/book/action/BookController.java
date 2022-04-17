@@ -95,7 +95,7 @@ public class BookController {
         ResponseEntity<AddBookResult> responseEntity = null;
         if (goNext) {
             result.setBook(bookMapper.bookBoToBookView(bookBo));
-            responseEntity = new ResponseEntity<AddBookResult>(result, HttpStatus.OK);
+            responseEntity = new ResponseEntity<AddBookResult>(result, HttpStatus.CREATED);
         } else {
             result.setMessage(message);
             responseEntity = new ResponseEntity<AddBookResult>(result, HttpStatus.BAD_REQUEST);
@@ -140,7 +140,7 @@ public class BookController {
         ResponseEntity<UpdateBookResult> responseEntity = null;
         if (goNext) {
             result.setBook(bookMapper.bookBoToBookView(bookBo));
-            responseEntity = new ResponseEntity<UpdateBookResult>(result, HttpStatus.OK);
+            responseEntity = new ResponseEntity<UpdateBookResult>(result, HttpStatus.CREATED);
         } else if (!isExist) {
             result.setMessage(message);
             responseEntity = new ResponseEntity<UpdateBookResult>(result, HttpStatus.NOT_FOUND);
