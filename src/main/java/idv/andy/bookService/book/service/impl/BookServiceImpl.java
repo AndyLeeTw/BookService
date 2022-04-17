@@ -11,6 +11,8 @@ import idv.andy.bookService.book.service.IBookService;
 import idv.andy.bookService.book.service.bean.AddBookInput;
 import idv.andy.bookService.book.service.bean.AddBookOutput;
 import idv.andy.bookService.book.service.bean.BookBo;
+import idv.andy.bookService.book.service.bean.DeleteBookInput;
+import idv.andy.bookService.book.service.bean.DeleteBookOutput;
 import idv.andy.bookService.book.service.bean.QueryAllBooksOutput;
 import idv.andy.bookService.book.service.bean.UpdateBookInput;
 import idv.andy.bookService.book.service.bean.UpdateBookOutput;
@@ -86,6 +88,30 @@ public class BookServiceImpl implements IBookService {
                 bookDao.save(bookMapper.bookBoToBook(bookBo));
                 output.setSuccess(true);
                 output.setBookBo(bookBo);
+            } else {
+                output.setMessage("the book is not exist");
+            }
+        } catch (Exception e) {
+            output.setMessage(e.getMessage());
+        }
+        
+        return output;
+    }
+
+    /**
+     * @see idv.andy.bookService.book.service.IBookService#deleteBook(idv.andy.bookService.book.service.bean.DeleteBookInput)
+     */
+    @Override
+    public DeleteBookOutput deleteBook(DeleteBookInput input) {
+        DeleteBookOutput output = new DeleteBookOutput();
+        
+        try {
+            String isbn = input.getIsbn();
+            boolean isExist = bookDao.existsById(isbn);
+            output.setExist(isExist);
+            if (isExist) {
+                bookDao.deleteById(isbn);
+                output.setSuccess(true);
             } else {
                 output.setMessage("the book is not exist");
             }
