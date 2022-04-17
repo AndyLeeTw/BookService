@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import idv.andy.bookService.book.action.view.AddBookResult;
 import idv.andy.bookService.book.action.view.BookInputBean;
+import idv.andy.bookService.book.action.view.DeleteBookResult;
 import idv.andy.bookService.book.action.view.QueryAllBooksResult;
 import idv.andy.bookService.book.action.view.UpdateBookResult;
 import idv.andy.bookService.book.config.BookConfig;
@@ -24,6 +26,8 @@ import idv.andy.bookService.book.service.IBookService;
 import idv.andy.bookService.book.service.bean.AddBookInput;
 import idv.andy.bookService.book.service.bean.AddBookOutput;
 import idv.andy.bookService.book.service.bean.BookBo;
+import idv.andy.bookService.book.service.bean.DeleteBookInput;
+import idv.andy.bookService.book.service.bean.DeleteBookOutput;
 import idv.andy.bookService.book.service.bean.QueryAllBooksOutput;
 import idv.andy.bookService.book.service.bean.UpdateBookInput;
 import idv.andy.bookService.book.service.bean.UpdateBookOutput;
@@ -149,6 +153,44 @@ public class BookController {
             responseEntity = new ResponseEntity<UpdateBookResult>(result, HttpStatus.BAD_REQUEST);
         }
 
+        return responseEntity;
+    }
+    
+    @DeleteMapping("/{isbn}")
+    public ResponseEntity<DeleteBookResult> deleteBook(@PathVariable("isbn") String isbn) {
+        DeleteBookResult result = new DeleteBookResult();
+        
+        boolean goNext = true;
+        String message = null;
+        
+        if (!validateIsbn(isbn)) {
+            goNext = false;
+            message = "isbn 格式錯誤";
+        }
+        
+        boolean isExist = true;
+        if (goNext) {
+            DeleteBookInput deleteBookInput = new DeleteBookInput();
+            deleteBookInput.setIsbn(isbn);
+            DeleteBookOutput deleteBookOutput = bookService.deleteBook(deleteBookInput);
+            if (!deleteBookOutput.isSuccess()) {
+                goNext = false;
+                isExist = deleteBookOutput.isExist();
+                message = deleteBookOutput.getMessage();
+            }
+        }
+        
+        ResponseEntity<DeleteBookResult> responseEntity = null;
+        if (goNext) {
+            responseEntity = new ResponseEntity<DeleteBookResult>(HttpStatus.NO_CONTENT);
+        } else if (!isExist) {
+            result.setMessage(message);
+            responseEntity = new ResponseEntity<DeleteBookResult>(result, HttpStatus.NOT_FOUND);
+        } else {
+            result.setMessage(message);
+            responseEntity = new ResponseEntity<DeleteBookResult>(result, HttpStatus.BAD_REQUEST);
+        }
+        
         return responseEntity;
     }
 
