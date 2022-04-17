@@ -2,9 +2,11 @@ package idv.andy.bookService.book.service.bean;
 
 import java.util.Date;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class BookBo {
     private String isbn;
     private String name;
@@ -12,5 +14,5 @@ public class BookBo {
     private String translator;
     private String publisher;
     private Date publishDate;
-    private String price;
+    private double price;
 }
