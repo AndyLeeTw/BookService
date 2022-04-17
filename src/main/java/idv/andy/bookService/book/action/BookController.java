@@ -8,19 +8,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import idv.andy.bookService.book.action.view.AddBookResult;
 import idv.andy.bookService.book.action.view.BookInputBean;
 import idv.andy.bookService.book.action.view.QueryAllBooksResult;
+import idv.andy.bookService.book.action.view.UpdateBookResult;
 import idv.andy.bookService.book.config.BookConfig;
 import idv.andy.bookService.book.service.IBookService;
 import idv.andy.bookService.book.service.bean.AddBookInput;
 import idv.andy.bookService.book.service.bean.AddBookOutput;
 import idv.andy.bookService.book.service.bean.BookBo;
 import idv.andy.bookService.book.service.bean.QueryAllBooksOutput;
+import idv.andy.bookService.book.service.bean.UpdateBookInput;
+import idv.andy.bookService.book.service.bean.UpdateBookOutput;
 import idv.andy.bookService.book.service.mapper.BookMapper;
 
 @RestController
@@ -97,6 +102,49 @@ public class BookController {
         return responseEntity;
     }
     
+    @PutMapping("/books/{isbn}")
+    public ResponseEntity<UpdateBookResult> updateBook(@PathVariable("isbn") String isbn, @RequestBody BookInputBean inputBean) {
+        UpdateBookResult result = new UpdateBookResult();
+
+        boolean goNext = true;
+        String message = null;
+
+        if (inputBean != null) {
+            inputBean.setIsbn(isbn);
+        }
+        
+        String validateRes = validateBookInput(inputBean);
+        if (StringUtils.hasText(validateRes)) {
+            goNext = false;
+            message = validateRes;
+        }
+
+        BookBo bookBo = null;
+        if (goNext) {
+            UpdateBookInput updateBookInput = new UpdateBookInput();
+            updateBookInput.setBookBo(bookMapper.bookInputBeanToBookBo(inputBean));
+
+            UpdateBookOutput updateBookOutput = bookService.updateBook(updateBookInput);
+            if (updateBookOutput.isSuccess()) {
+                bookBo = updateBookOutput.getBookBo();
+            } else {
+                goNext = false;
+                message = updateBookOutput.getMessage();
+            }
+        }
+
+        ResponseEntity<UpdateBookResult> responseEntity = null;
+        if (goNext) {
+            result.setBook(bookMapper.bookBoToBookView(bookBo));
+            responseEntity = new ResponseEntity<UpdateBookResult>(result, HttpStatus.OK);
+        } else {
+            result.setMessage(message);
+            responseEntity = new ResponseEntity<UpdateBookResult>(result, HttpStatus.BAD_REQUEST);
+        }
+
+        return responseEntity;
+    }
+
     private String validateBookInput(BookInputBean inputBean) {
         StringBuilder sb = new StringBuilder();
         if (inputBean == null) {
