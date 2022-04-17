@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import idv.andy.bookService.book.action.view.AddBookResult;
@@ -28,6 +29,7 @@ import idv.andy.bookService.book.service.bean.UpdateBookInput;
 import idv.andy.bookService.book.service.bean.UpdateBookOutput;
 import idv.andy.bookService.book.service.mapper.BookMapper;
 
+@RequestMapping("/books")
 @RestController
 public class BookController {
     @Resource
@@ -35,7 +37,7 @@ public class BookController {
     @Resource
     private BookMapper bookMapper;
     
-    @GetMapping("/books")
+    @GetMapping
     public ResponseEntity<QueryAllBooksResult> queryAllBooks() {
         QueryAllBooksResult result = new QueryAllBooksResult();
         boolean goNext = true;
@@ -63,7 +65,7 @@ public class BookController {
         return responseEntity;
     }
     
-    @PostMapping("/books")
+    @PostMapping
     public ResponseEntity<AddBookResult> addBook(@RequestBody BookInputBean inputBean) {
         AddBookResult result = new AddBookResult();
         
@@ -102,7 +104,7 @@ public class BookController {
         return responseEntity;
     }
     
-    @PutMapping("/books/{isbn}")
+    @PutMapping("/{isbn}")
     public ResponseEntity<UpdateBookResult> updateBook(@PathVariable("isbn") String isbn, @RequestBody BookInputBean inputBean) {
         UpdateBookResult result = new UpdateBookResult();
 
