@@ -49,7 +49,7 @@
         }
 
 * **呼叫範例:**
-    ````
+    ````javascript
     $.ajax({
         url: "/books",
         dataType: "json",
@@ -106,23 +106,24 @@
 
 * **呼叫範例:**
 
-        $.ajax({
-            url: "/books",
-            dataType: "json",
-            type : "POST",
-            data : {
-                "isbn": "978-62670-9936-0",
-                "name": "123",
-                "author": "aaa",
-                "translator": null,
-                "publisher": "bbb",
-                "publishDate": "2020-01-01",
-                "price": 1.0
-            },
-            success : function(r) {
-                console.log(r);
-            }
-        });
+    ````javascript
+    $.ajax({
+        url: "/books",
+        dataType: "json",
+        type : "POST",
+        data : {
+            "isbn": "978-62670-9936-0",
+            "name": "123",
+            "author": "aaa",
+            "translator": null,
+            "publisher": "bbb",
+            "publishDate": "2020-01-01",
+            "price": 1.0
+        },
+        success : function(r) {
+            console.log(r);
+        }
+    });
 **修改書籍**
 ----
     修改書籍資料
@@ -172,22 +173,23 @@
 
 * **呼叫範例:**
 
-        $.ajax({
-            url: "/users/978-62670-9936-0",
-            dataType: "json",
-            type : "PUT",
-            data : {
-                "name": "123",
-                "author": "aaa",
-                "translator": null,
-                "publisher": "bbb",
-                "publishDate": "2020-01-01",
-                "price": 1.0
-            },
-            success : function(r) {
-                console.log(r);
-            }
-        });
+    ````javascript
+    $.ajax({
+        url: "/users/978-62670-9936-0",
+        dataType: "json",
+        type : "PUT",
+        data : {
+            "name": "123",
+            "author": "aaa",
+            "translator": null,
+            "publisher": "bbb",
+            "publishDate": "2020-01-01",
+            "price": 1.0
+        },
+        success : function(r) {
+            console.log(r);
+        }
+    });
 **刪除書籍**
 ----
     刪除書籍資料
@@ -216,11 +218,12 @@
 
 * **呼叫範例:**
 
-        $.ajax({
-            url: "/users/978-62670-9936-0",
-            dataType: "json",
-            type : "DELETE",
-            success : function(r) {
-                console.log(r);
-            }
-        });
+    ````javascript
+    $.ajax({
+        url: "/users/978-62670-9936-0",
+        dataType: "json",
+        type : "DELETE",
+        success : function(r) {
+            console.log(r);
+        }
+    });
