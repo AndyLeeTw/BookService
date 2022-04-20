@@ -8,7 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BookInputBean {
-    private String isbn;
     private String name;
     private String author;
     private String translator;

@@ -69,14 +69,14 @@ public class BookController {
         return responseEntity;
     }
     
-    @PostMapping
-    public ResponseEntity<AddBookResult> addBook(@RequestBody BookInputBean inputBean) {
+    @PostMapping("/{isbn}")
+    public ResponseEntity<AddBookResult> addBook(@PathVariable("isbn") String isbn, @RequestBody BookInputBean inputBean) {
         AddBookResult result = new AddBookResult();
         
         boolean goNext = true;
         String message = null;
         
-        String validateRes = validateBookInput(inputBean);
+        String validateRes = validateBookInput(inputBean, isbn);
         if (StringUtils.hasText(validateRes)) {
             goNext = false;
             message = validateRes;
@@ -85,7 +85,7 @@ public class BookController {
         BookBo bookBo = null;
         if (goNext) {
             AddBookInput addBookInput = new AddBookInput();
-            addBookInput.setBookBo(bookMapper.bookInputBeanToBookBo(inputBean));
+            addBookInput.setBookBo(bookMapper.bookInputBeanToBookBo(inputBean, isbn));
             
             AddBookOutput addBookOutput = bookService.addBook(addBookInput);
             if (addBookOutput.isSuccess()) {
@@ -114,12 +114,8 @@ public class BookController {
 
         boolean goNext = true;
         String message = null;
-
-        if (inputBean != null) {
-            inputBean.setIsbn(isbn);
-        }
         
-        String validateRes = validateBookInput(inputBean);
+        String validateRes = validateBookInput(inputBean, isbn);
         if (StringUtils.hasText(validateRes)) {
             goNext = false;
             message = validateRes;
@@ -129,7 +125,7 @@ public class BookController {
         BookBo bookBo = null;
         if (goNext) {
             UpdateBookInput updateBookInput = new UpdateBookInput();
-            updateBookInput.setBookBo(bookMapper.bookInputBeanToBookBo(inputBean));
+            updateBookInput.setBookBo(bookMapper.bookInputBeanToBookBo(inputBean, isbn));
 
             UpdateBookOutput updateBookOutput = bookService.updateBook(updateBookInput);
             if (updateBookOutput.isSuccess()) {
@@ -194,12 +190,12 @@ public class BookController {
         return responseEntity;
     }
 
-    private String validateBookInput(BookInputBean inputBean) {
+    private String validateBookInput(BookInputBean inputBean, String isbn) {
         StringBuilder sb = new StringBuilder();
         if (inputBean == null) {
             sb.append("input 為 null");
         } else {
-            if (!validateIsbn(inputBean.getIsbn())) {
+            if (!validateIsbn(isbn)) {
                 sb.append("isbn 不符合格式\n");
             }
             

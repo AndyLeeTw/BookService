@@ -18,7 +18,7 @@ public interface BookMapper {
     @Mapping(target = "author", qualifiedByName = "trim")
     @Mapping(target = "translator", qualifiedByName = "trim")
     @Mapping(target = "publisher", qualifiedByName = "trim")
-    BookBo bookInputBeanToBookBo(BookInputBean inputBean);
+    BookBo bookInputBeanToBookBo(BookInputBean inputBean, String isbn);
     
     BookBo bookToBookBo(Book book);
     
